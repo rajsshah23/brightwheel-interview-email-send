@@ -3,11 +3,7 @@ from fastapi import Depends
 from app.clients.email_send_client import EmailSendClient
 from app.clients.utils import make_email_send_client
 from app.dependencies import get_settings
-from app.models.send_email_models import (
-    SendEmailRequest,
-    SendEmailResponse,
-    EmailSendStatus,
-)
+from app.models.send_email_models import SendEmailRequest, SendEmailResponse
 from app.setup.settings import Settings
 
 

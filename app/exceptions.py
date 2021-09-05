@@ -6,7 +6,7 @@ class SpendgridSendException(SpendgridException):
     pass
 
 
-class SpendgrindSendNon200Response(SpendgridSendException):
+class SpendgridSendNon200Response(SpendgridSendException):
     pass
 
 

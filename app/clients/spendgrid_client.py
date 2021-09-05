@@ -7,7 +7,7 @@ from requests import Response
 
 from app.clients.email_send_client import EmailSendClient
 from app.dependencies import get_settings
-from app.exceptions import SpendgridSendException, SpendgrindSendNon200Response
+from app.exceptions import SpendgridSendException, SpendgridSendNon200Response
 from app.models.send_email_models import (
     SendEmailRequest,
     SendEmailResponse,
@@ -53,7 +53,7 @@ class SpendgridClient(EmailSendClient):
                     url=url,
                     body=body.dict(),
                 )
-                raise SpendgrindSendNon200Response()
+                raise SpendgridSendNon200Response()
 
             return SendEmailResponse(request=request, send_status=EmailSendStatus.sent)
         except Exception as e:

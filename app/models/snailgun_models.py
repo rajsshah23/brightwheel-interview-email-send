@@ -3,10 +3,9 @@ import datetime
 from pydantic import EmailStr
 from pydantic.main import BaseModel
 
-# TODO: Add field descriptions
 from app.models.send_email_models import EmailSendStatus
 
-
+# TODO: Add descriptions for the fields
 class SnailgunSendEmailRequest(BaseModel):
     from_email: EmailStr
     from_name: str
@@ -16,6 +15,7 @@ class SnailgunSendEmailRequest(BaseModel):
     body: str
 
 
+# TODO: Add descriptions for the fields
 class SnailgunSendEmailResponse(BaseModel):
     id: str
     from_email: EmailStr

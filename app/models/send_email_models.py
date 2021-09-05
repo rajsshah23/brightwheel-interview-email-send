@@ -20,6 +20,7 @@ class SendEmailRequest(BaseModel):
     body: str = Field(description="The HTML body of the email")
 
 
+# TODO: Add descriptions for the fields
 class SendEmailResponse(BaseModel):
     request: SendEmailRequest
     send_status: EmailSendStatus

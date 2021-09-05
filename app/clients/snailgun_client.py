@@ -8,11 +8,7 @@ from structlog import get_logger
 
 from app.clients.email_send_client import EmailSendClient
 from app.dependencies import get_settings
-from app.exceptions import (
-    SnailgunSendException,
-    SpendgrindSendNon200Response,
-    SnailgunSendNon200Response,
-)
+from app.exceptions import SnailgunSendException, SnailgunSendNon200Response
 from app.models.send_email_models import SendEmailRequest, SendEmailResponse
 from app.models.snailgun_models import (
     SnailgunSendEmailRequest,
