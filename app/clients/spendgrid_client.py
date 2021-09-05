@@ -13,7 +13,10 @@ from app.models.send_email_models import (
     SendEmailResponse,
     EmailSendStatus,
 )
-from app.models.spendgrid_models import SpendgridSendEmailRequest
+from app.models.spendgrid_models import (
+    SpendgridSendEmailRequest,
+    SpendgridSendEmailResponse,
+)
 from app.setup.settings import Settings
 from structlog import get_logger
 
@@ -33,20 +36,20 @@ class SpendgridClient(EmailSendClient):
             }
 
             body: SpendgridSendEmailRequest = SpendgridSendEmailRequest(
-                sender=f"{request.from_name} {request.from_email}",
-                recipient=f"{request.to_name} {request.to}",
+                sender=f"{request.from_name} <{str(request.from_email)}>",
+                recipient=f"{request.to_name} <{str(request.to)}>",
                 subject=request.subject,
                 body=request.body,
             )
 
             response: Response = requests.post(
-                url=url, headers=headers, data=body.dict()
+                url=url, headers=headers, data=body.json()
             )
             logger.info("Spendgrid email send response", response_text=response.text)
 
-            if response.status_code != 200:
+            if response.status_code not in [200, 201]:
                 logger.error(
-                    "Received a non-200 OK HTTP response status from Spendgrid",
+                    "Received a non-200, non-201 HTTP response status from Spendgrid",
                     received_status=response.status_code,
                     response_text=response.text,
                     request=request.dict(),
@@ -55,7 +58,13 @@ class SpendgridClient(EmailSendClient):
                 )
                 raise SpendgridSendNon200Response()
 
-            return SendEmailResponse(request=request, send_status=EmailSendStatus.sent)
+            parsed_response: SpendgridSendEmailResponse = SpendgridSendEmailResponse(
+                **response.json()
+            )
+
+            return SendEmailResponse(
+                request=request, id=parsed_response.id, send_status=EmailSendStatus.sent
+            )
         except Exception as e:
             logger.error(
                 "Encountered an error while attempting to send an email via Spendgrid.",

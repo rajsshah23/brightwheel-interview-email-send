@@ -23,4 +23,5 @@ class SendEmailRequest(BaseModel):
 # TODO: Add descriptions for the fields
 class SendEmailResponse(BaseModel):
     request: SendEmailRequest
+    id: str
     send_status: EmailSendStatus

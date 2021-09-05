@@ -49,13 +49,13 @@ class SnailgunClient(EmailSendClient):
             )
 
             response: Response = requests.post(
-                url=url, headers=headers, data=body.dict()
+                url=url, headers=headers, data=body.json()
             )
             logger.info("Snailgun email send response", response_text=response.text)
 
-            if response.status_code != 200:
+            if response.status_code not in [200, 201]:
                 logger.error(
-                    "Received a non-200 OK HTTP response status from Snailgun",
+                    "Received a non-200, non-201 HTTP response status from Snailgun",
                     received_status=response.status_code,
                     response_text=response.text,
                     request=request.dict(),
@@ -69,7 +69,9 @@ class SnailgunClient(EmailSendClient):
             )
 
             return SendEmailResponse(
-                request=request, send_status=parsed_response.status
+                request=request,
+                id=parsed_response.id,
+                send_status=parsed_response.status,
             )
         except Exception as e:
             logger.error(

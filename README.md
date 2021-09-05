@@ -16,6 +16,7 @@ Note: API docs will be at: http://127.0.0.1:8000/docs
 
 ## How to use the code
 1. You can use the docs at http://127.0.0.1:8000/docs to interact with the code.
+2. The `EMAIL_SEND_VENDOR` env variablein `.env` controls what email vendor will be used.
 
 ## How to read the code
 1. The `/app` dir has the source code.
@@ -62,43 +63,3 @@ Other TODOs:
 2. Add support for spinning up the app in a Docker container
 3. Setup a SQL database to store the incoming requests, their send status, which email vendor was used, vendor send id, etc.
 4. Add authentication to the service
-
-
-
-## Spendgrid and Snailgun API errors
-I encountered errors when hitting Spendgrid and Snailgun APIs.
-
-Send email request I used:
-```
-curl --location --request POST 'http://127.0.0.1:8000/send_email/email/send' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "to": "rajsshah23@gmail.com",
-    "to_name": "Raj Shah",
-    "from": "noreply@mybrightwheel.com",
-    "from_name": "brightwheel",
-    "subject": "Your Weekly Report",
-    "body": "<h1>Weekly Report</h1><p>You saved 11 hours this week!</p>"
-}'
-```
-
-Get email status request I used:
-```
-curl --location --request GET 'http://127.0.0.1:8000/send_email/email/snailgun_email_8I/status'
-```
-
-Snailgun get email status error -
-```json5
-{"error":"undefined method `[]' for nil:NilClass"}
-```
-
-Snailgun send email error -
-```json5
-{"error":"783: unexpected token at 'from_email=noreply%40mybrightwheel.com\u0026from_name=brightwheel\u0026to_email=rajsshah23%40gmail.com\u0026to_name=Raj+Shah\u0026subject=Your+Weekly+Report\u0026body=%3Ch1%3EWeekly+Report%3C%2Fh1%3E%3Cp%3EYou+saved+11+hours+this+week%21%3C%2Fp%3E'"}
-```
-
-
-Spendgrid send email error -
-```json5
-{"error":"783: unexpected token at 'sender=brightwheel+noreply%40mybrightwheel.com\u0026recipient=Raj+Shah+rajsshah23%40gmail.com\u0026subject=Your+Weekly+Report\u0026body=%3Ch1%3EWeekly+Report%3C%2Fh1%3E%3Cp%3EYou+saved+11+hours+this+week%21%3C%2Fp%3E'"}
-```
