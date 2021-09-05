@@ -20,3 +20,8 @@ just dev-setup
 
 
 API Docs: http://127.0.0.1:8000/docs
+
+
+If I had more time, I would have setup a SQL database to store the incoming
+requests, their send status, which email vendor was used, vendor send id,
+etc.
