@@ -1,3 +1,4 @@
+# .env is for the project, not for the Justfile.
 set dotenv-load := false
 
 dev-setup:
