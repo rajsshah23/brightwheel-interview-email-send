@@ -40,7 +40,7 @@ class SpendgridClient(EmailSendClient):
             )
 
             response: Response = requests.post(
-                url=url, headers=headers, json=body.dict()
+                url=url, headers=headers, data=body.dict()
             )
             logger.info("Spendgrid email send response", response_text=response.text)
 

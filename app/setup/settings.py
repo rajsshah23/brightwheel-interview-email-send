@@ -11,7 +11,6 @@ class Settings(BaseSettings):
     SPENDGRID_API_KEY: str
     SNAILGUN_API_KEY: str
     SNAILGUN_BASE_URL: HttpUrl
-
     SPENDGRID_BASE_URL: HttpUrl
 
     class Config:
