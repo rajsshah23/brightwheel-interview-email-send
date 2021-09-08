@@ -1,3 +1,4 @@
+import json
 from unittest import TestCase
 
 import requests
@@ -45,24 +46,35 @@ class TestSpendgidClient(TestCase):
         # Mock calls
         response: Response = Response()
         response.status_code = 200
-        response._content = b"{'success': True}"
+        response._content = json.dumps(
+            {
+                "success": True,
+                "id": "foo_email_id",
+                "sender": "brightwheel <noreply@mybrightwheel.com>",
+                "recipient": "Raj Shah <rajsshah23@gmail.com>",
+                "subject": "Your Weekly Report",
+                "body": "<h1>Weekly Report</h1><p>You saved 10 hours this week!</p>",
+            }
+        ).encode("utf-8")
         expect(times=1, obj=requests).post(
             url=f"{self._settings.SPENDGRID_BASE_URL}/send_email",
             headers={
                 "Content-Type": "application/json",
                 "X-Api-Key": self._settings.SPENDGRID_API_KEY,
             },
-            json={
-                "sender": "brightwheel noreply@mybrightwheel.com",
-                "recipient": "Raj Shah rajsshah23@gmail.com",
-                "subject": "Your Weekly Report",
-                "body": "<h1>Weekly Report</h1><p>You saved 10 hours this week!</p>",
-            },
+            data=json.dumps(
+                {
+                    "sender": "brightwheel <noreply@mybrightwheel.com>",
+                    "recipient": "Raj Shah <rajsshah23@gmail.com>",
+                    "subject": "Your Weekly Report",
+                    "body": "<h1>Weekly Report</h1><p>You saved 10 hours this week!</p>",
+                }
+            ),
         ).thenReturn(response)
 
         # Test
         expected: SendEmailResponse = SendEmailResponse(
-            request=self._request, send_status=EmailSendStatus.sent
+            id="foo_email_id", request=self._request, send_status=EmailSendStatus.sent
         )
 
         actual: SendEmailResponse = self._spendgrid_client.send_email(
